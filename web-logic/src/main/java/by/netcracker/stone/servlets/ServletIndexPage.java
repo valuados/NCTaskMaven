@@ -6,6 +6,8 @@ import by.netcracker.stone.factory.StoneFactory;
 import by.netcracker.stone.necklace.Necklace;
 import by.netcracker.stone.stone.Stone;
 import com.google.gson.Gson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,6 +44,7 @@ public class ServletIndexPage extends HttpServlet {
             SHOW_GENERAL_PRICE="price",
             SHOW_GENERAL_WEIGHT="weight";
 
+    private static Logger log = LogManager.getLogger(ServletIndexPage.class);
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
@@ -49,8 +52,11 @@ public class ServletIndexPage extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html; charset=UTF-8");
-        request.getParameter("command");
+
+        log.trace("COMMAND NAME: " + request.getParameter("command"));
+
         Necklace necklace;
+
         switch (request.getParameter("command")){
             case SHOW:
                 necklace = new Necklace();
@@ -107,7 +113,8 @@ public class ServletIndexPage extends HttpServlet {
               result+=res.getDouble(1);
             System.out.println(res);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(e);
+            //e.printStackTrace();
         }
         return result;
     }
@@ -128,11 +135,13 @@ public class ServletIndexPage extends HttpServlet {
             try {
                 conn.close();
             } catch(SQLException e ){
-                e.printStackTrace();
+                log.error(e);
+                //e.printStackTrace();
             }
 
         }
         catch (SQLException e) {
+            log.error(e);
             throw new ServletException(e);
         }
     }
@@ -151,7 +160,8 @@ public class ServletIndexPage extends HttpServlet {
         }
 
     } catch (SQLException e) {
-        e.printStackTrace();
+            log.error(e);
+        //e.printStackTrace();
     }
         return result;
     }
